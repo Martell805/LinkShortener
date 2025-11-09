@@ -11,4 +11,4 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-      - run: ./gradlew build spotlessCheck
+      - run: chmod +x ./gradlew && ./gradlew build spotlessCheck
