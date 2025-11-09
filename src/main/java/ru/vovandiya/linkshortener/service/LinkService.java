@@ -8,6 +8,7 @@ import java.net.URISyntaxException;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -26,16 +27,16 @@ public class LinkService {
   private String defaultLink;
 
   public Link shortenLink(
-      String destination, Integer maxUses, LocalDateTime expiration, User user) {
+    String destination, Integer maxUses, LocalDateTime expiration, User user) {
     var link =
-        Link.builder()
-            .destination(destination)
-            .maxUses(maxUses)
-            .timesUsed(0)
-            .expiration(expiration)
-            .generatedBy(user)
-            .shortLink(defaultLink + "/" + getHash(user.getId().toString(), destination))
-            .build();
+      Link.builder()
+        .destination(destination)
+        .maxUses(maxUses)
+        .timesUsed(0)
+        .expiration(expiration)
+        .generatedBy(user)
+        .shortLink(defaultLink + "/" + getHash(user.getId().toString(), destination))
+        .build();
 
     while (true) {
       try {
@@ -85,7 +86,12 @@ public class LinkService {
       System.out.printf("[INFO] Link %s reached maximum number of uses\n", link.getShortLink());
     }
 
-    Desktop.getDesktop().browse(new URI(link.getDestination()));
+    if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+      Desktop.getDesktop().browse(new URI(link.getDestination()));
+    } else {
+      System.out.printf("Link: %s\n", link.getDestination());
+      System.out.println("Cannot open browser automatically. Please open the link manually.");
+    }
   }
 
   public List<Link> getAllForUser(User user) {
