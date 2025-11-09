@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:h2:file:./links
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+  main:
+    banner-mode: off
+
+app:
+  defaultLink: vovandiya.ru
+  deleteLinksCron: "0/30 * * * * *"
+
+logging:
+  level:
+    root: OFF
