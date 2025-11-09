@@ -8,7 +8,6 @@ import java.net.URISyntaxException;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -27,16 +26,16 @@ public class LinkService {
   private String defaultLink;
 
   public Link shortenLink(
-    String destination, Integer maxUses, LocalDateTime expiration, User user) {
+      String destination, Integer maxUses, LocalDateTime expiration, User user) {
     var link =
-      Link.builder()
-        .destination(destination)
-        .maxUses(maxUses)
-        .timesUsed(0)
-        .expiration(expiration)
-        .generatedBy(user)
-        .shortLink(defaultLink + "/" + getHash(user.getId().toString(), destination))
-        .build();
+        Link.builder()
+            .destination(destination)
+            .maxUses(maxUses)
+            .timesUsed(0)
+            .expiration(expiration)
+            .generatedBy(user)
+            .shortLink(defaultLink + "/" + getHash(user.getId().toString(), destination))
+            .build();
 
     while (true) {
       try {
